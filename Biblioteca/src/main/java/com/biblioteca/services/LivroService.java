@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.biblioteca.models.Livro;
-import com.biblioteca.models.Usuario;
 import com.biblioteca.repositories.LivroRepository;
 
 @Service
@@ -25,25 +24,17 @@ public class LivroService {
 
     public Livro editarLivro(Long id, Livro livroAtualizado) {
         Livro livroExistente = livroRepository.findById(id).orElse(null);
-        //procura o livro pelo id no banco de dados e caso não encontre o orElse retorna null
+        // Procura o livro pelo id no banco de dados e caso não encontre, o orElse retorna null
 
         if (livroExistente != null) {
             livroExistente.setNomeLivro(livroAtualizado.getNomeLivro());
-            livroExistente.setEmprestado(livroAtualizado.isEmprestado());
-
-            // Verifica se o livro foi emprestado e atualiza o usuário associado
-            if (livroAtualizado.isEmprestado()) {
-                Usuario novoUsuario = livroAtualizado.getUsuario();
-                livroExistente.setUsuario(novoUsuario);
-            } else {}
+            // Atualiza apenas o nome do livro
 
             return livroRepository.save(livroExistente);
         } else {
             return null;
         }
     }
-
-
 
     public void excluirLivro(Long id) {
         livroRepository.deleteById(id);

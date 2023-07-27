@@ -1,6 +1,6 @@
 package com.biblioteca.models;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -64,20 +64,28 @@ public class Usuario {
 	private String password;
 	
 	
+	
 	//@OneToMany(mappedBy = "usuario")
 	//indica que uma pessoa pode obter muitos livros
 	//private List<Livro> livros = new ArrayList<Livro>();
 	//livros é uma lista de objetos Livro, ele cria umma nova lista vazia de Livro
 
+	
+	
+	//novo
+	@OneToMany(mappedBy = "usuario")
+    private List<Emprestimo> emprestimos;
+	
 	public Usuario() {
 	}
 	//construtor vazio
 	
 	
-	public Usuario(Long id, String username, String password) {
+	public Usuario(Long id, String username, String password, List<Emprestimo> emprestimos) {
 		this.id = id;
 		this.username = username;
 		this.password = password;
+		this.emprestimos = emprestimos;
 	}
 	//construtor parametrizados, ele inicia os valores
 
@@ -123,5 +131,13 @@ public class Usuario {
 	
 	
 	*/
+	
+	public List<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+
+	public void setEmprestimos(List<Emprestimo> emprestimos) {
+		this.emprestimos = emprestimos;
+	}
 	
 }

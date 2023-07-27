@@ -1,12 +1,13 @@
 package com.biblioteca.models;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +23,7 @@ public class Livro {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true)
 	private Long id;
-	
-	@ManyToOne
-	@JoinColumn(name = "usuario_id", nullable = false)
-	private Usuario usuario;
+
 	
 	@Column(name = "nomeLivro", length = 255, nullable = false)
 	@NotNull
@@ -35,16 +33,32 @@ public class Livro {
 	
 	@Column(name = "emprestado", nullable = false)
     private boolean emprestado;
+	
+	@Column(name = "quantidade_emprestimos", nullable = false, columnDefinition = "int default 0")
+	private int quantidadeEmprestimos;
+
+	
+	//novo
+	@OneToMany(mappedBy = "livro")
+	private List<Emprestimo> emprestimos;
+	//novo
+
+
 
 	public Livro() {
 	}
 
-	public Livro(Long id, Usuario usuario, String nomeLivro, boolean emprestado) {
+	public Livro(Long id, Usuario usuario, String nomeLivro,
+			boolean emprestado, List<Emprestimo> emprestimos, Integer quantidadeEmprestimos) {
+		super();
 		this.id = id;
-		this.usuario = usuario;
 		this.nomeLivro = nomeLivro;
 		this.emprestado = emprestado;
+		this.emprestimos = emprestimos;
+		this.quantidadeEmprestimos = 0; 
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -52,14 +66,6 @@ public class Livro {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Usuario getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
 	}
 
 	public String getNomeLivro() {
@@ -70,15 +76,34 @@ public class Livro {
 		this.nomeLivro = nomeLivro;
 	}
 
+	public List<Emprestimo> getEmprestimos() {
+		return emprestimos;
+	}
+
+	public void setEmprestimos(List<Emprestimo> emprestimos) {
+		this.emprestimos = emprestimos;
+	}
+
+	
 	public boolean isEmprestado() {
 		return emprestado;
 	}
 
 	public void setEmprestado(boolean emprestado) {
+		if (this.emprestado != emprestado && emprestado) {
+			// Se o livro não estava emprestado e agora foi emprestado, incrementa a quantidade de empréstimos
+			this.quantidadeEmprestimos++;
+		}
 		this.emprestado = emprestado;
 	}
-	
-	
+
+	public int getQuantidadeEmprestimos() {
+		return quantidadeEmprestimos;
+	}
+
+	public void setQuantidadeEmprestimos(int quantidadeEmprestimos) {
+		this.quantidadeEmprestimos = quantidadeEmprestimos;
+	}	
 	
 	
 
