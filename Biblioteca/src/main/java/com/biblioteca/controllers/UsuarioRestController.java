@@ -31,6 +31,7 @@ public class UsuarioRestController {
         Usuario novoUsuario = usuarioService.criarUsuario(usuario);
         //chama o método criarUsuario  no objeto usuarioService
         //a resposta  do métodoe armazenada na variavel novo usuario
+        
         return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
     }
 
