@@ -22,7 +22,7 @@ public class UsuarioService {
 
     public Usuario criarUsuario(Usuario usuario) {
     	if (usuario.getUsername() == null || usuario.getUsername().length() < 3) {
-            throw new IllegalArgumentException("O nome do usuário deve ter pelo menos 3 letras.");
+    		return null;
         }
     	
         return usuarioRepository.save(usuario);

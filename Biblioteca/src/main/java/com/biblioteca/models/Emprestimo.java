@@ -17,12 +17,14 @@ import jakarta.persistence.Table;
 //cria uma tabela com nome empréstimo
 public class Emprestimo {
     
+	//id do emprestimo
 	@Id
 	//primeira chave da tabela
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	//indica que o valor do id vai ser criado automaticamente pelo bc
+	//indica que o valor do id vai ser criado automaticamente pelo banco de dados
     private Long id;
 
+	
 	@ManyToOne
     @JoinColumn(name = "livro_id", nullable = false)
     private Livro livro;

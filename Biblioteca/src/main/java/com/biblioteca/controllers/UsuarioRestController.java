@@ -25,15 +25,18 @@ public class UsuarioRestController {
 	private UsuarioService usuarioService;
 	
 	
-    @PostMapping("")
-    public ResponseEntity<Usuario> criarUsuario(@RequestBody Usuario usuario) {
-    	//é uma classe do Spring Framework que representa uma resposta HTTP personalizada
+	@PostMapping("")
+    public ResponseEntity<?> criarUsuario(@RequestBody Usuario usuario) {
         Usuario novoUsuario = usuarioService.criarUsuario(usuario);
-        //chama o método criarUsuario  no objeto usuarioService
-        //a resposta  do métodoe armazenada na variavel novo usuario
-        
-        return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+
+        if (novoUsuario != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(novoUsuario);
+        } else {
+            String mensagemErro = "O nome do usuário deve ter pelo menos 3 letras.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagemErro);
+        }
     }
+   
 
     @PutMapping("editar/{id}")
     public ResponseEntity<Usuario> editarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {

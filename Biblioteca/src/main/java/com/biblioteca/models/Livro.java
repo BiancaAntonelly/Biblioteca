@@ -91,7 +91,7 @@ public class Livro {
 
 	public void setEmprestado(boolean emprestado) {
 		if (this.emprestado != emprestado && emprestado) {
-			// Se o livro não estava emprestado e agora foi emprestado, incrementa a quantidade de empréstimos
+			// O livro não estava emprestado e agora foi emprestado, incrementa a quantidade de empréstimos
 			this.quantidadeEmprestimos++;
 		}
 		this.emprestado = emprestado;
