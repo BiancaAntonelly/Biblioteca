@@ -120,6 +120,9 @@ public class EmprestimoService {
     public void atualizarStatusEmprestimosAgendado() {
         atualizarStatusEmprestimos();
     }
+   
+
+
 
     public Emprestimo realizarDevolucao(Emprestimo emprestimo) {
     	emprestimo.setDataDevolucao(LocalDate.now());
