@@ -6,28 +6,27 @@ import org.springframework.stereotype.Service;
 
 import com.biblioteca.models.Auth;
 import com.biblioteca.models.Usuario;
-import com.biblioteca.repositories.AuthenticatorRepository;
-import com.biblioteca.repositories.LivroRepository;
 import com.biblioteca.repositories.UsuarioRepository;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 
-import java.nio.charset.StandardCharsets;
+
+import java.security.Key;
 import java.util.Date;
+
 import java.util.Optional;
 
 @Service
 public class AuthenticatorService {
 
     
-    private AuthenticatorRepository authenticatorRepository;
+
     private UsuarioRepository usuarioRepository;
     
     @Autowired
-    public AuthenticatorService(AuthenticatorRepository authenticatorRepository, UsuarioRepository usuarioRepository) {
-        this.authenticatorRepository = authenticatorRepository;
+    public AuthenticatorService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
@@ -36,11 +35,11 @@ public class AuthenticatorService {
     //É uma classe oferecida pelo spring security
     //Essa clase implementa a interface passwordEncoder que verifica e codifica senhas seguras
     
-    private final String secret = "chave-secreta-token";
+    //private final String secret = "chave-secreta-token";
     //assinatura do token
     
-    public boolean authenticateUser(Auth auth) {
-        
+    public String authenticateUser(Auth auth) {
+    	System.out.println("Entrou no método authenticateUser");
     	Optional<Usuario> storedUser = usuarioRepository.findByUsername(auth.getUsername());
     	//buca no repositorio de usuarioRepository um usuario com o username
         //caso exista um usuario ele é salvo em um optional
@@ -52,20 +51,20 @@ public class AuthenticatorService {
             //compara a senha do usuario com a senha do auth
             if (passwordMatches) {
             	//se a senha for igual
-                System.out.println("Autenticação bem sucedida no usuário: " + auth.getUsername());
-                return true;
+            	return "Autenticação bem sucedida no usuário: " + auth.getUsername();
             } else {
-                System.out.println("Problema na autenticação do usuário: " + auth.getUsername());
-                return false;
+            	return "Problema na autenticação do usuário: " + auth.getUsername();
             }
         } else {
-            System.out.println("Usuário não encontrado");
-            return false;
+        	return "Usuário não encontrado";
         }
     }
+    
 
     public String generateToken(String username) {
     	//recebe o nome do usuario
+    	   Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    	   //cria uma chave secreta key que é usada para assinar os tokens
         return Jwts.builder()
                 .setSubject(username)
                 //define o nome so usuario passado como argumento
@@ -73,7 +72,8 @@ public class AuthenticatorService {
                 //define o momento que o token foi criado
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
                 //define o momento que o token vai expirar
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(key)
+                //indica que a chave do token será feita usando a chave key que foi criada
                 .compact();
         		//gera o token final e retorna 
     }
