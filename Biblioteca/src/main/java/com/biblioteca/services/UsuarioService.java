@@ -1,6 +1,7 @@
 package com.biblioteca.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -19,12 +20,21 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
     
+    
+    private final BCryptPasswordEncoder senhaOriginal = new BCryptPasswordEncoder();
+
+    
 
     public Usuario criarUsuario(Usuario usuario) {
     	if (usuario.getUsername() == null || usuario.getUsername().length() < 3) {
     		return null;
         }
     	
+    	String encodedPassword = senhaOriginal.encode(usuario.getPassword());
+    	//a senha é codificada
+        usuario.setPassword(encodedPassword);
+        //seto o usuario para que o usuario seja salvo a senha codificada
+        
         return usuarioRepository.save(usuario);
     }
 
@@ -33,8 +43,9 @@ public class UsuarioService {
         //procura o usuaro atravez do findById e devolve se encontrou ou vazio caso não tenha encontrado
         if (usuarioExistente != null) {
             usuarioExistente.setUsername(usuarioAtualizado.getUsername());
-            usuarioExistente.setPassword(usuarioAtualizado.getPassword());;
-
+            String encodedPassword = senhaOriginal.encode(usuarioAtualizado.getPassword());
+            usuarioExistente.setPassword(encodedPassword);
+       
             return usuarioRepository.save(usuarioExistente);
         } else {
             return null;

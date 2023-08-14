@@ -51,7 +51,8 @@ public class AuthenticatorService {
             //compara a senha do usuario com a senha do auth
             if (passwordMatches) {
             	//se a senha for igual
-            	return "Autenticação bem sucedida no usuário: " + auth.getUsername();
+            	String token = generateToken(auth.getUsername());
+            	return "Autenticação bem sucedida no usuário: " + auth.getUsername() + "\nToken: " + token;
             } else {
             	return "Problema na autenticação do usuário: " + auth.getUsername();
             }
@@ -76,6 +77,7 @@ public class AuthenticatorService {
                 //indica que a chave do token será feita usando a chave key que foi criada
                 .compact();
         		//gera o token final e retorna 
+
     }
 }
 

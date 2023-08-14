@@ -3,6 +3,7 @@ package com.biblioteca.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +33,16 @@ public class LivroRestController {
 
 	    
 	    @PostMapping("")
-	    public ResponseEntity<Livro> criarLivro(@RequestBody Livro livro) {
+	    @PreAuthorize("isAuthenticated()")
+	    public ResponseEntity<String> criarLivro(@RequestBody Livro livro) {
 	        Livro novoLivro = livroService.criarLivro(livro);
-	        return ResponseEntity.status(HttpStatus.CREATED).body(novoLivro);
+	        if(novoLivro!=null) {
+	        String mensagem = "Livro criado com sucesso: " + novoLivro.getNomeLivro();
+	        return ResponseEntity.status(HttpStatus.CREATED).body(mensagem);
+	        }else {
+	            String mensagemErro = "Não foi possível criar o livro.";
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(mensagemErro);
+	        }
 	        //cria um novo livro
 	    }
 

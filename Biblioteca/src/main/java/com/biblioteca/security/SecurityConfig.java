@@ -2,20 +2,31 @@ package com.biblioteca.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
+import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
+
 
 @Configuration
+@EnableWebSecurity
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, HandlerMappingIntrospector introspector) throws Exception {
     	//método que cria e configura um filtro de segurança. 
+    	MvcRequestMatcher.Builder mvcMatcherBuilder = new MvcRequestMatcher.Builder(introspector);
     	http
-            .authorizeRequests(authorizeRequests ->
+    	    .csrf(AbstractHttpConfigurer::disable)
+            .authorizeHttpRequests(authorizeRequests ->
             //inicia a autorização para solicitações
                 authorizeRequests
-                    .antMatchers("/authenticator").permitAll()
+                .requestMatchers(mvcMatcherBuilder.pattern("/authenticator")).permitAll()
+                .requestMatchers(mvcMatcherBuilder.pattern("/usuario")).permitAll()
+                .requestMatchers(mvcMatcherBuilder.pattern("/usuario/editar/3")).permitAll()
                     //permite acesso público ao endpoint /authenticator
                     .anyRequest().authenticated()
                     //qualquer outra endpoint precisa de autorização

@@ -36,20 +36,22 @@ public class UsuarioRestController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mensagemErro);
         }
     }
+	
    
-
+	
     @PutMapping("editar/{id}")
-    public ResponseEntity<Usuario> editarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
+    public ResponseEntity<String> editarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioAtualizado) {
         //@PathVariable Long id significa que o id vai ser retirado do caminho http
     	Usuario usuarioEditado = usuarioService.editarUsuario(id, usuarioAtualizado);
         if (usuarioEditado != null) {
-            return ResponseEntity.ok(usuarioEditado);
+            return ResponseEntity.ok("Usuário " + usuarioAtualizado.getUsername() + " editado com sucesso!");
             //ocorreu tudo certo
         } else {
             return ResponseEntity.notFound().build();
             //usuario não encontrado, notFound é o metodo do ResponseEntity, erro 404
         }
     }
+    
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> excluirUsuario(@PathVariable Long id) {
