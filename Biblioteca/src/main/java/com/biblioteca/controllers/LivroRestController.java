@@ -33,8 +33,8 @@ public class LivroRestController {
 
 	    
 	    @PostMapping("")
-	    @PreAuthorize("isAuthenticated()")
 	    public ResponseEntity<String> criarLivro(@RequestBody Livro livro) {
+	    	System.out.println("entrando em criar livro controller");
 	        Livro novoLivro = livroService.criarLivro(livro);
 	        if(novoLivro!=null) {
 	        String mensagem = "Livro criado com sucesso: " + novoLivro.getNomeLivro();
