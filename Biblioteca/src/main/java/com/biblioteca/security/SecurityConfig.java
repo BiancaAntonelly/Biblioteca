@@ -2,7 +2,6 @@ package com.biblioteca.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -40,42 +39,3 @@ public class SecurityConfig {
         return http.build();
     }
 }
-
-
-/*
- * @Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http)throws Exception{
-		return http.csrf().disable()
-				.authorizeHttpRequests()
-				.requestMatchers("/authenticator").permitAll()
-				.and()
-				.authorizeHttpRequests().requestMatchers("/products/***")
-				.authenticated().and()
-				.sessionCreationPoilicy(SessionCreationPolicy.STATELESS)
-				.and()
-				.authenticationProvider(AuthenticationProvider())
-				.addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
-				.build();
-	}
- * 
- * 
- * 
- *
- *
-    @Bean
-    //definindo o SecurityFilterChain como bean
-    public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        
-    	http
-            .authorizeRequests(authorizeRequests ->
-                authorizeRequests
-                    .antMatchers("/authenticator").permitAll() // Endpoint de autenticação público
-                    .anyRequest().authenticated() // Outros endpoints requerem autenticação
-            )
-            .httpBasic(); // Utilizar autenticação básica
-
-        return http.build();
-    }
-}
-*/
-
