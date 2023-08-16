@@ -14,6 +14,7 @@ import io.jsonwebtoken.security.Keys;
 
 
 import java.security.Key;
+import java.security.KeyPair;
 import java.util.Date;
 
 import java.util.Optional;
@@ -51,7 +52,8 @@ public class AuthenticatorService {
             //compara a senha do usuario com a senha do auth
             if (passwordMatches) {
             	//se a senha for igual
-            	String token = generateToken(auth.getUsername());
+            	Key privateKey = keyPair.getPrivate();
+            	String token = generateToken(auth.getUsername(), privateKey);
             	return "Autenticação bem sucedida no usuário: " + auth.getUsername() + "\nToken: " + token;
             } else {
             	return "Problema na autenticação do usuário: " + auth.getUsername();
@@ -64,7 +66,7 @@ public class AuthenticatorService {
 
     public String generateToken(String username) {
     	//recebe o nome do usuario
-    	   Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+//    	   Key key = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     	   //cria uma chave secreta key que é usada para assinar os tokens
         return Jwts.builder()
                 .setSubject(username)
@@ -73,10 +75,11 @@ public class AuthenticatorService {
                 //define o momento que o token foi criado
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 horas
                 //define o momento que o token vai expirar
-                .signWith(key)
+                .signWith(private Key, SignatureAlgorithm.RS256)
                 //indica que a chave do token será feita usando a chave key que foi criada
                 .compact();
         		//gera o token final e retorna 
+        
 
     }
 }
