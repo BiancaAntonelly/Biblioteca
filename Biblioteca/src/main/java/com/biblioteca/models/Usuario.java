@@ -63,6 +63,7 @@ public class Usuario {
 	@Size (min = 8, max = 60)
 	private String password;
 	
+	private String token;
 	
 	
 	//@OneToMany(mappedBy = "usuario")
@@ -138,6 +139,14 @@ public class Usuario {
 
 	public void setEmprestimos(List<Emprestimo> emprestimos) {
 		this.emprestimos = emprestimos;
+	}
+	
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
 	}
 	
 }

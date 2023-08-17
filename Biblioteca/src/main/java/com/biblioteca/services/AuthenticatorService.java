@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.biblioteca.models.Auth;
+//import com.biblioteca.models.Auth;
 import com.biblioteca.models.Usuario;
 import com.biblioteca.repositories.UsuarioRepository;
 
@@ -34,19 +34,19 @@ public class AuthenticatorService {
 
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
-    public String authenticateUser(Auth auth) {
+    public String authenticateUser(Usuario usuario) {
         System.out.println("Entrou no método authenticateUser");
-        Optional<Usuario> storedUser = usuarioRepository.findByUsername(auth.getUsername());
+        Optional<Usuario> storedUser = usuarioRepository.findByUsername(usuario.getUsername());
 
         if (storedUser.isPresent()) {
-            Usuario usuario = storedUser.get();
-            boolean passwordMatches = passwordEncoder.matches(auth.getPassword(), usuario.getPassword());
+            Usuario storedUsuario = storedUser.get();
+            boolean passwordMatches = passwordEncoder.matches(usuario.getPassword(), storedUsuario.getPassword());
 
             if (passwordMatches) {
-                String token = generateToken(auth.getUsername());
-                return "Autenticação bem sucedida no usuário: " + auth.getUsername() + "\nToken: " + token;
+                String token = generateToken(usuario.getUsername());
+                return "Autenticação bem sucedida no usuário: " + usuario.getUsername() + "\nToken: " + token;
             } else {
-                return "Problema na autenticação do usuário: " + auth.getUsername();
+                return "Problema na autenticação do usuário: " + usuario.getUsername();
             }
         } else {
             return "Usuário não encontrado";

@@ -1,4 +1,4 @@
-package com.biblioteca.models;
+/*package com.biblioteca.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -62,3 +62,4 @@ public class Auth {
 	}
 
 
+*/
